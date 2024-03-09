@@ -11,6 +11,7 @@ import com.example.aviatickets.databinding.FragmentOfferListBinding
 import com.example.aviatickets.model.service.FakeService
 
 
+
 class OfferListFragment : Fragment() {
 
     companion object {
@@ -37,7 +38,7 @@ class OfferListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupUI()
-        adapter.setItems(FakeService.offerList)
+        adapter.submitList(FakeService.offerList)
     }
 
     private fun setupUI() {
@@ -46,19 +47,18 @@ class OfferListFragment : Fragment() {
 
             sortRadioGroup.setOnCheckedChangeListener { _, checkedId ->
                 when (checkedId) {
-                    R.id.sort_by_price -> {
-                        /**
-                         * implement sorting by price
-                         */
-                    }
-
-                    R.id.sort_by_duration -> {
-                        /**
-                         * implement sorting by duration
-                         */
-                    }
+                    R.id.sort_by_price -> sortOffersByPrice()
+                    R.id.sort_by_duration -> sortOffersByDuration()
                 }
             }
         }
+    }
+    private fun sortOffersByPrice() {
+        val sortedList = adapter.currentList.sortedBy { it.price }
+        adapter.submitList(sortedList)
+    }
+    private fun sortOffersByDuration() {
+        val sortedList = adapter.currentList.sortedBy { it.flight.duration }
+        adapter.submitList(sortedList)
     }
 }
